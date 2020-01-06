@@ -17,8 +17,9 @@ import java.util.Random;
  * Thomas Mildner
  */
 public class NarratorStreamHandler extends SkillStreamHandler{
-    public static final String IAM_ACCESSKEY    = "AKIAXKP5OSFKGNM3RY6E";                       // creativecomputation key: "AKIAJNPHYPQHQ6OFPECQ";
-    public static final String IAM_SECRETKEY    = "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";   // creativecomputation key: "Rfh+2yXx5+u4EtJQ5MdT2in2vVKdAirqEgTa6qk9";
+    public static final String IAM_ACCESSKEY    = "put-your-accesskey-here";
+    public static final String IAM_SECRETKEY    = "put-your-secretkey-here";
+
 
     public static BlackboardRetriever BLACKBOARD_RETRIEVER  = new BlackboardRetriever();
     public static Random RANDOM                             = new Random();

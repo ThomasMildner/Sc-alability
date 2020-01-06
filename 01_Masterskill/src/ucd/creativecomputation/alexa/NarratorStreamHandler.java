@@ -18,11 +18,11 @@ import java.net.URL;
  * Thomas Mildner
  */
 public class NarratorStreamHandler extends SkillStreamHandler{
-    public static final String IAM_ACCESSKEY    = "AKIAJNPHYPQHQ6OFPECQ";
-    public static final String IAM_SECRETKEY    = "Rfh+2yXx5+u4EtJQ5MdT2in2vVKdAirqEgTa6qk9";
+    public static final String IAM_ACCESSKEY    = "put-your-accesskey-here";
+    public static final String IAM_SECRETKEY    = "put-your-secretkey-here";
 
     // S3 Bucket and Filenames
-    public static final String BUCKET_NAME              = "knowledge-based-modul-data";
+    public static final String BUCKET_NAME              = "name-of-the-s3bucket-containing-necessary-NOC-Files";
 
     public static final String NOC_FILE                 = "Veale's The Noc List.txt";
     //public static final String TYPICAL_ACTIVITY_FILE    = "Veale's Typical Activities.txt";
