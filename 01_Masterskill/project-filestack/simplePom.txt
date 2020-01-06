@@ -1,0 +1,166 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>ucd.creativecoputations</groupId>
+    <artifactId>narrator</artifactId>
+    <packaging>jar</packaging>
+    <version>0.1</version>
+    <name>alexa-narrator</name>
+
+    <developers>
+        <developer>
+            <name>Thomas Mildner</name>
+            <email>thomas.mildner@ucd-connect.ie</email>
+            <organization>The Creative Language System Group - University College Dublin</organization>
+            <organizationUrl>http://afflatus.ucd.ie</organizationUrl>
+        </developer>
+    </developers>
+
+    <repositories>
+        <repository>
+            <id>alexa-skills-kit-repo</id>
+            <url>file://${project.basedir}/repo</url>
+        </repository>
+    </repositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- AMAZON SKILL KIT -->
+            <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-bom</artifactId>
+                <version>1.11.409</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.amazon.alexa/ask-sdk-core -->
+        <dependency>
+            <groupId>com.amazon.alexa</groupId>
+            <artifactId>ask-sdk</artifactId>
+            <version>2.9.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazon.alexa</groupId>
+            <artifactId>alexa-skills-kit</artifactId>
+            <version>1.8.1</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+    <properties>
+        <property name="disableRequestSignatureCheck" value="false"/>
+        <property name="supportedApplicationIds" value=""/>
+        <property name="timestampTolerance" value="150"/>
+    </properties>
+
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/resources</directory>
+            </resource>
+        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.10</version>
+                    <executions>
+                        <execution>
+                            <id>copy</id>
+                            <phase>test-compile</phase>
+                            <goals>
+                                <goal>copy-dependencies</goal>
+                            </goals>
+                            <configuration>
+                                <includeScope>test</includeScope>
+                                <includeTypes>so,dll,dylib</includeTypes>
+                                <outputDirectory>${project.basedir}/native-libs</outputDirectory>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.0</version>
+                    <configuration>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.2.1</version>
+                    <configuration>
+                        <mainClass>Launcher</mainClass>
+                        <systemProperties>
+                            <systemProperty>
+                                <key>javax.net.ssl.keyStore</key>
+                                <value>/insert/your/path/java-keystore.jks</value>
+                            </systemProperty>
+                            <systemProperty>
+                                <key>javax.net.ssl.keyStorePassword</key>
+                                <value>insert_your_password</value>
+                            </systemProperty>
+                            <systemProperty>
+                                <key>com.amazon.speech.speechlet.servlet.disableRequestSignatureCheck</key>
+                                <value>${disableRequestSignatureCheck}</value>
+                            </systemProperty>
+                            <systemProperty>
+                                <key>com.amazon.speech.speechlet.servlet.supportedApplicationIds</key>
+                                <value>${supportedApplicationIds}</value>
+                            </systemProperty>
+                            <systemProperty>
+                                <key>com.amazon.speech.speechlet.servlet.timestampTolerance</key>
+                                <value>${timestampTolerance}</value>
+                            </systemProperty>
+                        </systemProperties>
+                    </configuration>
+                </plugin>
+
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>2.3</version>
+                    <configuration>
+                        <createDependencyReducedPom>false</createDependencyReducedPom>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>shade</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <finalName>NarratorSkill</finalName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
