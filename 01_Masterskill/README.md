@@ -2,75 +2,45 @@
 The complete Alexa skill as part of the Scéalability framework.
 
 
-###Content:
+### Content:
 
-1. Setting Up the Skill
+1. Description of the Skill
 2. Setting Up Alexa
 3. Editing Code
-4. Testing the Application
 
 ---
 
-###Introduction to the Alexa Environment
+### Description of the Skill
 
-In order to get Alexa started, an account to the Amazon Web Services (AWS) is mandatory. Once set up, log into AWS (console.aws.amazon.com) and enter the Lambda environment (you can search for it using the search function). Here, create a new custom skill and give it an appropriate name.
-You will see, that currently the application uses the Alexa Skill Kit, which is needed in order to upload any skill to Alexa and use it with an Echo device, Amazon CloudWatch Logs, which is always part of an app, and DynamoDB, a No-SQL Database, where the stories will be stored and referenced and which is further being used in order to generate the stories (however this is not implemented yet).
+The master-skill contains all Alexa-based modules of Scéalability's theatricality and interactivity scenarios. It initializes the blackboard as an Amazon DynamoDB table and retrieves necessary Scéalextric knowledge-base modules from an Amazon S3 bucket. Both the DynamoDB table and the S3 bucket have to be instantiated beforehand. Moreover, the Scéalextric knowledge-base modules have to be uploaded to the bucket while URLs have to be passed to the program code of Scéalability. Also, the stream handler functions have to be passed to Amazon’s skill back-end and sample utterances have to entered that serve as invokes for the particular handler functions . Once all credentials s and preparations have been set up properly, the skill can be uploaded as a custom Amazon Lambda function.
 
-You can click through all these configurations and see their settings. The Alexa Skill Kit includes the Skill ID from the application, hosted on developer.amazon.com (more on that later). The Skill ID needs to be added here, otherwise the communication between the servers will not work.. However, most interesting is the Narrator tab, which allows to upload new code (currently in Java 8). The most important part is, the ‘Function Code’ area. Code can be entered in three ways:
-As a build .jar file
-As a packaged .zip file
-As either, but uploaded into a Amazon S3 bucket. Last has the advantage, that a toolkit for the Eclipse IDE was released, in order to build and upload code directly. This is not included yet, since I programmed in IntelliJ IDEA.
-Any application for AWS needs to have a handler, a special function that basically builds a main method and responds to AWS. The path (where this function would lie inside the packed .jar or .zip) needs to be entered here.
+*Functionalities of the Theatricality Scenario*
+The master-skill provides functions for both solo-acts and partner-acts of the theatricality scenario. While Alexa simply reads a pre-chosen story from the blackboard in a solo-act condition, it needs a commentary agent as a partner to tell a story in the form of a partner-act. When telling a story alone, Alexa can either fetch a story based on user input or a random one.
 
-Once everything is set up the project can be saved (upper right corner). If you need to change anything at the Alexa Skills side (Utterances, Invocation..) you will need to copy the ARN (arn:aws:lambda:us-east-1:253702680774:function:Narrator), which is basically the key for Alexa Skills Kit (ASK).
+In case of a partner-act, the master-skill includes all necessary functionality to follow the described meta-model of Alexa. This allows Alexa to react to the commentary agent and keep the narration going. It also gives Alexa the ability to comment on certain behaviour of the commentary agent if necessary.
 
-###Setting Up Alexa
+This skill further provides all functions necessary to generate individual Scéalextric NOC character instances. Such instances are needed, if a character is to be introduced in a story, or to find a character-based story Alexa will tell. The introductions can be either in the form of a ‘weaponized introduction’ which uses the affordances of the favourable weapon of a NOC to enter a scene, or in the form of a ‘cross-over introduction’ which uses positive and negative talking points of similar NOCs whose intersection is the desired character. Another function uses the appearing NOCs of a story to generate unique story titles. These are in the style of ‘The Good, the Bad and the Ugly’ (The {X}, the {Y} and the {Z}).
 
-Log into to developer.anazon.com with the same login credentials, and continue to Alexa Skills Kit. Again, a list with all current Alexa Skills will show, including the Narrator Skill which you need to open in order to set things up.
+Depending on the desired usage, the code can be adapted to allow other performances as well. Since everything is programmed modular, the code should be easily expandable in the future.
 
-*From top to bottom:*
-Firstly, the copied ARN  needs to be linked here. Within the Endpoint section, see the Default Region. The here entered ARN needs to be the very same as the one of the Amazon Lambda Function, that stores the code. Further, the Skill ID (amzn1.ask.skill.755a3cb6-b57c-4c13-ae65-616bfe38a9e4) needs to be entered within the Handler class inside the code for approving the usage. Once, everything is setup correctly, the rest can be added.
+### Setting Up Alexa
 
-The interaction model sets the framework, what the app can do, and how it will interact with its audience. It starts with the Invocation, its name. Since the application is called Narrator, in order to start it the audience needs to invoke it by saying: ‘Alexa, open Narrator’. Once the application active, other phrases can be used, such as the NarratorIntent.
+To use Scéalability on an Echo device requires an active Amazon account. Once created, developer.amazon.com can be accessed with the same login credentials. Here, the Alexa Skills Kit (ASK) can be used that allows for new custom Alexa skills to be created. Usually, Alexa skills are carried out by two of Amazon’s services: (1) Amazon Lambda, which is used to host the program code of the skill, and (2) the Alexa Developer Console, which controls how user input is recognised by an Echo device. Both services have to be connected using the provided credentials. 
 
-The NarratorIntent will create a story. Everything entered here, will invoke this part of the application. Important to know, is that every Intent setup here needs to be handled inside the Java Project. Intents need to be handled and responded to in order for anything to happen.
 
-No complete interaction model has been designed as of know, for not all features and possibilities were set. This is one important point for the future and needs to be designed soon. The complete interaction model will determine the usage of the Skill and thus the functions to be programmed.  
+While Amazon Lambda contains the underlying logic of a skill, Alexa Developer Console manages the executive logic between user and program code. This can further be seen as  the interaction model of the skill, which describes what the application can do, and how it will interact with its audience. It starts with the invocation name, the title of the skill, which is used to open and execute a skill. This name has to set inside the Alexa Developer Console and reaches out to the Lambda functions.
 
-Whenever changes were made, the project needs to be saved and build. It then will be automatically setup to the Echo Device of the workgroup, which is already connected up to this account.
+The different handler functions (beneath the main stream handler that opens a new skill session) enable the different functionalities of the master-skill. Although there are handlers for both the solo-acts as well as the partner-acts, each handler can be linked to specific user input in Alexa’s Developer Console. It is important to note, that Alexa uses machine learning to expand the possible user input. Although this may be of assistance in some cases, more possible functions to be invoked may result in possible overlaps when activating a function. This may lead to misunderstandings of the system that does not react appropriately to the commands. 
 
-(The echo can be accessed by logging in to alexa.amazon.com using the same login credentials. Further, all interactions will be stored there which can be handy for testing.)
 
-###Editing Code
+### Editing Code
 
-The code for the Narrator project lies in my (Thomas) GitHub. On request, it can be joined and cloned, but for now, it is private.
-Once the code is cloned, verify that all maven dependencies are setup correctly. The pom.xml lists all dependencies needed both from Amazon and others. Most errors will occur, when something is simply missing.
+The project consists of four main packages. The .alexa package contains all handlers including the NarratorStreamHandler which opens a new session with included function handlers. Similar to a main function, this handler maintains included functionalities and is the gate to Amazon’s web-services and thus needs all credentials. The .knowledgebase package contains the objects necessary to create new Scéalextric knowledge modules and NOC instances. Everything related to story generation and parsing of input text is contained within the .story package. Last, the .toolkit package contains necessary retrievers for the blackboard, the stories, and the Scéalextric tables. It further contains a class to generate a NOC counterpart list that is used by the introduction generator of Scéalability. 
 
-Within the GitHub project, a JavaDoc is included. I tried to describe every method. Since Amazon’s ScoreKeeper was used as a very good reference, many lines were taken and edited to match the Narrator’s functionality. However, much of the original logic still persists.
+The code may be altered in future to describe more agents for the multi-agent storytelling performances. Since it is within this Alexa skill that the blackboard is initialized and further partially maintained (each participating agent maintains their own entries of the blackboard), it needs to add new agents to be included on the blackboard as well as necessary data for them to perform a story. 
 
-The project consists of three main packages. The .narrator as the top level one, the .storage and the .storygenerator. Firstly, the narrator  package takes care of the main functionality of the application. It includes the handler function (NarratorSpeechletRequestStreamHandler.class) and interaction phrases. Secondly, the storage package sets a link to DynamoDB, the NoSQL database. This is not completely setup yet and needs completion. Lastly, the storygenerator does exactly what its name suggests, namely generating the story. For now, a hardcoded story is provided for testing reason. However, this is only temporary. The class shall connect  to Stefan’s server and receive a story. Most functions are already laid out, but need to be called or edited slightly. But the core idea might be changed, meaning the stories would be created differently.
-
-The most important thing here was, to generate stories using nouns (e.g. ‘Narrator, tell me a story about intrigue, misery, and comedy’). It is not clear, whether Stefan’s code could support this functionality.
-
-Additional functionality can be either added to the current packages or included within a matching new one. Please keep the neatness alive!
-
-When finished with any changes, the code needs to be uploaded to the Lambda function. When using Eclipse AWS Toolkit, please follow the instructions of their toolbox (-> Eclipse AWS ToolKit). Otherwise, build a .zip or .jar file. I would recommend to do it using Maven within any terminal shell. Therefore install Maven with your package manager, open a terminal and navigate the your local folder, where the pom.xml of the Narrator project can be found. Here, type the following:
+The skill relies on a variety of Maven dependencies that have to be included to the project’s structure. In order to build the code the following Maven command-line inout needs to be entered within the project’s source folder (where the pom.xml file should be).
 
 'mvn assembly:assembly -DdescriptorId=jar-with-dependencies package'
 
-In this case, a .jar file would be build inside a new folder named Target. Simply upload this file to inside the Lamda function and voilà, the now runs online.
-
-###Testing the Application
-
-I am not going to lie, testing an Amazon Skill is a hassle. Within the code, I mostly ran main methods, to verify that my objects have the right layout or structure, that strings are being concatenated correctly and such things. Outside it gets a little more tricky but not impossible.
-
-Firstly, no Amazon Echo is mandatory for using a skill. Within the ASK environment a testing feature is presented, which allows to enter any utterances and see their results. Nevertheless, I found that the results are not necessarily coherent with ‘real’ ones given by an echo. I struggled long before finding this out, debugging code were it turned out nothing needed to be done.
-
-If in doubt (which might happen just too often) you can copy the Json of the test result and switch to the environment of the Lambda Function. Here, next to the save button (also upper right corner) is the test button. Create a new test scenario and paste the Json result and run the test. The result gives some more hints on where an error might have occured.
-
-As a tipp, always manually verify that all endpoints (inside the code, and also ASK + Lambda) are correct. Secondly, check the path to the handler.class. It needs to be correct. Other then that, take a look at all responses and test them inside your IDE first.
-
-If nothing else work, please do not contact me. Good Luck!
-
-
-: )
+The created .jar can then be uploaded to the Amazon Lamda function. Any alterations on this end only affect the functionality of the Alexa Development Console if changes are made in regards to the stream handlers. The testing environment may help to identify possible errors.
