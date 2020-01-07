@@ -1,7 +1,7 @@
 # Scéalability
 Scéalability's Alexa Skill Variations
 
-This epository contains three skills: the master-skill, the interactive storytelling skill, and the non-interactive storytelling skill.
+This repository contains three skills: the master-skill, the interactive storytelling skill, and the non-interactive storytelling skill.
 The skills can be installed on any Echo device as a developer project.
 
 ## The Master-Skill:
